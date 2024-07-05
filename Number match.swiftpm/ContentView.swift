@@ -53,17 +53,21 @@ struct ContentView: View {
                     if finalTime < bestTime {
                         bestTime = finalTime
                     }
+                    print("Game finished! Final Time: \(finalTime) seconds")
                 }
             }
         }
         .padding()
         .onAppear {
             startTimer()
+            print("Game started. Numbers array: \(numbers)")
         }
         .onChange(of: matchedIndices.count) { newValue in
             if newValue == numbers.count {
                 finalTime = timerCount
                 isTimerRunning = false
+                print("All matches found. Timer stopped.")
+                print("Matched Indices: \(matchedIndices)")
             }
         }
     }
@@ -72,8 +76,10 @@ struct ContentView: View {
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             if self.isTimerRunning {
                 self.timerCount += 1
+                print("Timer count: \(self.timerCount)")
             } else {
                 timer.invalidate()
+                print("Timer invalidated.")
             }
         }
     }
@@ -86,6 +92,7 @@ struct ContentView: View {
         finalTime = 0
         isTimerRunning = true
         startTimer()
+        print("Game restarted. Numbers array: \(numbers)")
     }
 }
 
@@ -116,6 +123,7 @@ struct GridView: View {
         
         if !selectedIndices.contains(index) && !matchedIndices.contains(index) {
             selectedIndices.append(index)
+            print("Selected Indices: \(selectedIndices)")
             
             if selectedIndices.count == 2 {
                 checkForMatch()
@@ -127,10 +135,10 @@ struct GridView: View {
         if numbers[selectedIndices[0]] == numbers[selectedIndices[1]] {
             matchedIndices.append(contentsOf: selectedIndices)
             selectedIndices = []
+            print("Matched Indices: \(matchedIndices)")
         }
     }
 }
-
 
 struct CardView: View {
     let number: Int
@@ -149,8 +157,10 @@ struct CardView: View {
                     .foregroundColor(.white)
             }
         }
+        .onAppear {
+            print("Card number \(number) isFlipped: \(isFlipped)")
+        }
     }
 }
-
 
 
